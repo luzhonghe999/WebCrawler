@@ -1,6 +1,7 @@
 import pymssql
+# help(pymssql)
 if __name__ == "__main__":
-    conn = pymssql.connect(host='127.0.0.1', user='sa', password='0000', database='QIDATA')
+    conn = pymssql.connect(host='127.0.0.1', user='sa', password='0000', database='TEST')
     cur = conn.cursor()
     sql = "CREATE TABLE  stock_basics(stockcode NVARCHAR(25) PRIMARY KEY, name VARCHAR(25),industry  VARCHAR(25)" \
         ", area VARCHAR(25),pe float, outstanding float, totals float, totalAssets float, liquidAssets float," \
