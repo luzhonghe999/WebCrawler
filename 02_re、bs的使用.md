@@ -136,8 +136,8 @@ for film in all:
     print(args[0].get_text(),
     re.findall(r'\d+\.?\d+',args[1].get_text())[0],
     re.findall(r'\D',args[1].get_text())[-1],
-    re.findall(r'\d+\.?\d+',args[1].get_text())[0],
-    re.findall(r'\D',args[1].get_text())[-1])
+    re.findall(r'\d+\.?\d+',args[2].get_text())[0],
+    re.findall(r'\D',args[2].get_text())[-1])
 ```
 
 结果如下
