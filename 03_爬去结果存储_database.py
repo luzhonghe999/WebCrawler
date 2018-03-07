@@ -4,15 +4,36 @@ from bs4 import BeautifulSoup
 import re
 import pandas as pd
 from pandas import DataFrame
-# conn = pymssql.connect(host='127.0.0.1', user='sa', password='0000', database='TEST')
-# cur = conn.cursor()
-# sql = "CREATE TABLE  film_box_office (film_name NVARCHAR(25) PRIMARY KEY, y_box_office float,unit1  VARCHAR(25)" \
-#     ", a_box_office float,unit2  VARCHAR(25))"
-# cur.execute(sql)
-# conn.commit()
-# cur.close()
-# conn.commit()
-# print('build success')
+from sqlalchemy import create_engine # 引擎
+from sqlalchemy.ext.declarative import declarative_base # 基类
+from sqlalchemy import Column,Integer,String # 元素
+
+def create_table_sql():
+    conn = pymssql.connect(host='127.0.0.1', user='sa', password='0000', database='TEST')
+    cur = conn.cursor()
+    sql = "CREATE TABLE  film_box_office (film_name NVARCHAR(25) PRIMARY KEY, y_box_office float,unit1  VARCHAR(25)" \
+        ", a_box_office float,unit2  VARCHAR(25))"
+    cur.execute(sql)
+    conn.commit()
+    cur.close()
+    conn.commit()
+    print('build success')
+
+def insert_data_sql(df):
+    sql = "insert into [TEST].[dbo].[film_box_office] (film_name , y_box_office ,unit1 , a_box_office ,unit2 ) values "
+    for i in range(0,len(df)):
+        sql_film="('"+df.iloc[i][0]+"','"+df.iloc[i][1]+"','"+df.iloc[i][2]+"','"+df.iloc[i][3]+"','"+df.iloc[i][4]+"'),"
+        sql +=sql_film
+    print(sql[:-1])
+    conn = pymssql.connect(host='127.0.0.1', user='sa', password='0000', database='TEST')
+    cur = conn.cursor()
+    cur.execute(sql[:-1])
+    conn.commit()
+    cur.close()
+    conn.commit()
+
+def create_table_sqlalchemy():
+
 if __name__ == "__main__":
     response = request.urlopen("http://58921.com") #获取网址请求返回值
     html =str(response.read(), encoding='utf-8') # 返回bytes转为utf8
@@ -31,14 +52,4 @@ if __name__ == "__main__":
         all_film.append(film_info)
     df=DataFrame(all_film)
     df.columns = ['film_name', 'y_box_office', 'unit1', 'a_box_office', 'unit2']
-    sql = "insert into [TEST].[dbo].[film_box_office] (film_name , y_box_office ,unit1 , a_box_office ,unit2 ) values "
-    for i in range(0,len(df)):
-        sql_film="('"+df.iloc[i][0]+"','"+df.iloc[i][1]+"','"+df.iloc[i][2]+"','"+df.iloc[i][3]+"','"+df.iloc[i][4]+"'),"
-        sql +=sql_film
-    print(sql[:-1])
-    conn = pymssql.connect(host='127.0.0.1', user='sa', password='0000', database='TEST')
-    cur = conn.cursor()
-    cur.execute(sql[:-1])
-    conn.commit()
-    cur.close()
-    conn.commit()
+    
